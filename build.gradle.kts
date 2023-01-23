@@ -32,6 +32,7 @@ dependencies {
     // Spring dependencies
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     api("org.springframework.boot:spring-boot-autoconfigure")
+    api("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 
     // 测试依赖
