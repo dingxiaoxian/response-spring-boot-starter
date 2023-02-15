@@ -1,1 +1,1 @@
-rootProject.name = "response-spring-boot-starter"
+rootProject.name = extra["projectName"] as String

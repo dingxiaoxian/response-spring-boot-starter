@@ -34,10 +34,6 @@ dependencies {
     api("org.springframework.boot:spring-boot-autoconfigure")
     api("org.springframework.boot:spring-boot-starter-web")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-
-    // 测试依赖
-    compileOnly("com.google.code.gson:gson:2.10.1")
-    testImplementation("com.google.code.gson:gson:2.10.1")
 }
 
 tasks {
@@ -55,6 +51,7 @@ tasks {
     }
     jar {
         enabled = true
+        archiveClassifier.set("")
     }
     java {
         sourceCompatibility = JavaVersion.VERSION_17

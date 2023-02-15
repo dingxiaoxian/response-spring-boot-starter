@@ -4,6 +4,11 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.MethodParameter;
+import org.springframework.http.MediaType;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.server.ServerHttpRequest;
+import org.springframework.http.server.ServerHttpResponse;
 import tech.xiaoxian.response.AbstractUnifiedResponseAdvice;
 import tech.xiaoxian.response.UnifiedResponseErrorController;
 
@@ -17,6 +22,7 @@ public class UnifiedResponseAutoConfigure {
 
     /**
      * 构造函数
+     *
      * @param properties 嵌入配置文件内容
      */
     public UnifiedResponseAutoConfigure(UnifiedResponseProperties properties) {
@@ -30,6 +36,11 @@ public class UnifiedResponseAutoConfigure {
             @Override
             protected Boolean isPrintError() {
                 return null;
+            }
+
+            @Override
+            protected boolean ignoreBodyRewrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+                return false;
             }
         };
     }

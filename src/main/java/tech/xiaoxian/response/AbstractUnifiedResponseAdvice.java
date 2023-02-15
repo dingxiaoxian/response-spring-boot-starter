@@ -33,7 +33,7 @@ public abstract class AbstractUnifiedResponseAdvice implements ResponseBodyAdvic
      * json转换对象
      */
     @Resource
-    ObjectMapper objectMapper;
+    protected ObjectMapper objectMapper;
 
     /**
      * 默认是否打印异常
@@ -49,6 +49,7 @@ public abstract class AbstractUnifiedResponseAdvice implements ResponseBodyAdvic
 
     /**
      * 带是否打印异常参数构造
+     *
      * @param printError 是否打印异常
      */
     public AbstractUnifiedResponseAdvice(boolean printError) {
@@ -57,6 +58,7 @@ public abstract class AbstractUnifiedResponseAdvice implements ResponseBodyAdvic
 
     /**
      * 用户需要重写的是否打印异常函数
+     *
      * @return 是否打印异常
      */
     protected abstract Boolean isPrintError();
@@ -71,9 +73,30 @@ public abstract class AbstractUnifiedResponseAdvice implements ResponseBodyAdvic
         return true;
     }
 
+    /**
+     * 是否忽略重写此请求的返回值
+     *
+     * @param body                  返回值
+     * @param returnType            返回类型
+     * @param selectedContentType   http返回类型
+     * @param selectedConverterType 转换类型
+     * @param request               http请求
+     * @param response              http返回
+     * @return 是否重写
+     */
+    protected abstract boolean ignoreBodyRewrite(Object body,
+                                                 MethodParameter returnType,
+                                                 MediaType selectedContentType,
+                                                 Class<? extends HttpMessageConverter<?>> selectedConverterType,
+                                                 ServerHttpRequest request,
+                                                 ServerHttpResponse response);
+
     @SuppressWarnings("NullableProblems")
     @Override
     public Object beforeBodyWrite(Object body, MethodParameter returnType, MediaType selectedContentType, Class<? extends HttpMessageConverter<?>> selectedConverterType, ServerHttpRequest request, ServerHttpResponse response) {
+        if (ignoreBodyRewrite(body, returnType, selectedContentType, selectedConverterType, request, response)) {
+            return body;
+        }
         if (body instanceof String) {
             // 该部分代码用于避免函数返回String时出现的StringHttpMessageConverter类型转换问题
             // 详见 https://blog.csdn.net/weixin_45176654/article/details/109689869
